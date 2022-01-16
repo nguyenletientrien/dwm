@@ -2,6 +2,7 @@
 
 /* appearance */
 static const unsigned int borderpx  = 3;        /* border pixel of windows */
+static const unsigned int gappx     = 8;        /* gaps between windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const unsigned int systraypinning = 0;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
 static const unsigned int systrayonleft = 0;   	/* 0: systray in the right corner, >0: systray on left of status text */
@@ -57,9 +58,9 @@ static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen win
 static const Layout layouts[] = {
 	/* symbol     arrange function */
 	{ " ﬿ ",      tile },    /* first entry is default */
-	{ "  ",      monocle },
+	{ "  ",      monocle },
 	{ " 恵 ",     centeredmaster },
-	{ "  ",      centeredfloatingmaster },
+	{ "  ",      centeredfloatingmaster },
 	{ "  ",      NULL },    /* no layout function means floating behavior */
 };
 
@@ -80,52 +81,69 @@ static const char *dmenucmd[] = { "dmenu_run", NULL };
 static const char *termcmd[]  = { "alacritty", NULL };
 
 static Key keys[] = {
-	/* modifier                     key        function        argument */
-	{ MODKEY|ShiftMask,             XK_minus,      spawn,      SHCMD("pamixer -d 5") },
-	{ MODKEY|ShiftMask,             XK_equal,      spawn,      SHCMD("pamixer -i 5") },
-	{ MODKEY,                       XK_BackSpace,  spawn,      SHCMD("dunstctl close") },
-	{ MODKEY|ShiftMask,             XK_BackSpace,  spawn,      SHCMD("dunstctl close-all") },
-	{ MODKEY,                       XK_backslash,  spawn,      SHCMD("dunstctl history-pop") },
-	{ MODKEY|ShiftMask,             XK_Return,     spawn,      SHCMD("chromium") },
-	{ 0,                            XK_Print,      spawn,      SHCMD("screenshot") },
-	{ ShiftMask,                    XK_Print,      spawn,      SHCMD("screenshot selected") },
+	/* modifier                     key                 function        argument */
+	/* Volume (pamixer) */
+	{ MODKEY|ShiftMask,             XK_minus,           spawn,          SHCMD("pamixer -d 5") },
+	{ MODKEY|ShiftMask,             XK_equal,           spawn,          SHCMD("pamixer -i 5") },
 
-	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
-	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
-	{ MODKEY,                       XK_b,      togglebar,      {0} },
-	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
-	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
-	{ MODKEY,                       XK_i,      incnmaster,     {.i = +1 } },
-	{ MODKEY,                       XK_d,      incnmaster,     {.i = -1 } },
-	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.05} },
-	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.05} },
-	{ MODKEY,                       XK_m,      zoom,           {0} },
-	{ MODKEY,                       XK_Tab,    view,           {0} },
-	{ MODKEY,                       XK_q,      killclient,     {0} },
-	{ MODKEY,                       XK_e,      setlayout,      {.v = &layouts[0]} },
-	{ MODKEY,                       XK_r,      setlayout,      {.v = &layouts[1]} },
-	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[2]} },
-	{ MODKEY,                       XK_y,      setlayout,      {.v = &layouts[3]} },
-	{ MODKEY,                       XK_u,      setlayout,      {.v = &layouts[4]} },
-	{ MODKEY,                       XK_space,  setlayout,      {0} },
-	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
-	{ MODKEY,                       XK_f,      togglefullscr,  {0} },
-	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
-	{ MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
-	{ MODKEY,                       XK_comma,  focusmon,       {.i = -1 } },
-	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
-	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
-	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
-	TAGKEYS(                        XK_1,                      0)
-	TAGKEYS(                        XK_2,                      1)
-	TAGKEYS(                        XK_3,                      2)
-	TAGKEYS(                        XK_4,                      3)
-	TAGKEYS(                        XK_5,                      4)
-	TAGKEYS(                        XK_6,                      5)
-	TAGKEYS(                        XK_7,                      6)
-	TAGKEYS(                        XK_8,                      7)
-	TAGKEYS(                        XK_9,                      8)
-	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
+	/* Dunst */
+	{ MODKEY,                       XK_BackSpace,       spawn,          SHCMD("dunstctl close") },
+	{ MODKEY|ShiftMask,             XK_BackSpace,       spawn,          SHCMD("dunstctl close-all") },
+	{ MODKEY,                       XK_backslash,       spawn,          SHCMD("dunstctl history-pop") },
+	{ MODKEY|ShiftMask,             XK_Return,          spawn,          SHCMD("chromium") },
+
+	/* Screenshot (my script) */
+	{ 0,                            XK_Print,           spawn,          SHCMD("screenshot") },
+	{ ShiftMask,                    XK_Print,           spawn,          SHCMD("screenshot selected") },
+
+	{ MODKEY,                       XK_p,               spawn,          {.v = dmenucmd } },
+	{ MODKEY,                       XK_Return,          spawn,          {.v = termcmd } },
+
+	/* Layout */
+	{ MODKEY,                       XK_e,               setlayout,      {.v = &layouts[0]} },
+	{ MODKEY,                       XK_r,               setlayout,      {.v = &layouts[1]} },
+	{ MODKEY,                       XK_t,               setlayout,      {.v = &layouts[2]} },
+	{ MODKEY,                       XK_y,               setlayout,      {.v = &layouts[3]} },
+	{ MODKEY,                       XK_u,               setlayout,      {.v = &layouts[4]} },
+
+	/* gaps control */
+	{ MODKEY,                       XK_bracketleft,     setgaps,        {.i = -1 } },
+	{ MODKEY,                       XK_bracketright,    setgaps,        {.i = +1 } },
+	{ MODKEY|ShiftMask,             XK_bracketleft,     setgaps,        {.i = 0  } },
+
+	{ MODKEY,                       XK_b,               togglebar,      {0} },
+	{ MODKEY,                       XK_j,               focusstack,     {.i = +1 } },
+	{ MODKEY,                       XK_k,               focusstack,     {.i = -1 } },
+	{ MODKEY,                       XK_i,               incnmaster,     {.i = +1 } },
+	{ MODKEY,                       XK_d,               incnmaster,     {.i = -1 } },
+	{ MODKEY,                       XK_h,               setmfact,       {.f = -0.05} },
+	{ MODKEY,                       XK_l,               setmfact,       {.f = +0.05} },
+	{ MODKEY,                       XK_m,               zoom,           {0} },
+	{ MODKEY,                       XK_Tab,             view,           {0} },
+	{ MODKEY,                       XK_q,               killclient,     {0} },
+
+	{ MODKEY,                       XK_space,           setlayout,      {0} },
+	{ MODKEY|ShiftMask,             XK_space,           togglefloating, {0} },
+	{ MODKEY,                       XK_f,               togglefullscr,  {0} },
+	{ MODKEY,                       XK_0,               view,           {.ui = ~0 } },
+	{ MODKEY|ShiftMask,             XK_0,               tag,            {.ui = ~0 } },
+	{ MODKEY,                       XK_comma,           focusmon,       {.i = -1 } },
+	{ MODKEY,                       XK_period,          focusmon,       {.i = +1 } },
+	{ MODKEY|ShiftMask,             XK_comma,           tagmon,         {.i = -1 } },
+	{ MODKEY|ShiftMask,             XK_period,          tagmon,         {.i = +1 } },
+
+	TAGKEYS(                        XK_1,               0)
+	TAGKEYS(                        XK_2,               1)
+	TAGKEYS(                        XK_3,               2)
+	TAGKEYS(                        XK_4,               3)
+	TAGKEYS(                        XK_5,               4)
+	TAGKEYS(                        XK_6,               5)
+	TAGKEYS(                        XK_7,               6)
+	TAGKEYS(                        XK_8,               7)
+	TAGKEYS(                        XK_9,               8)
+
+	/* Exit dwm */
+	{ MODKEY|ShiftMask,             XK_q,               quit,           {0} },
 };
 
 /* button definitions */
