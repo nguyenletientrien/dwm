@@ -34,8 +34,9 @@ static const char *colors[][3]      = {
 static const char *const autostart[] = {
 	"picom", NULL,
 	"dwmblocks", NULL,
-	"nm-applet", NULL,
 	"sh", "-c", "~/.fehbg", NULL,
+	"nm-applet", NULL,
+	"volumeicon", NULL,
 	NULL /* terminate */
 };
 
@@ -95,6 +96,7 @@ static Key keys[] = {
 	/* Volume (pamixer) */
 	{ MODKEY|ShiftMask,             XK_minus,           spawn,          SHCMD("pamixer -d 5") },
 	{ MODKEY|ShiftMask,             XK_equal,           spawn,          SHCMD("pamixer -i 5") },
+	{ MODKEY|ShiftMask,             XK_m,               spawn,          SHCMD("pamixer -t") },
 
 	/* Dunst */
 	{ MODKEY,                       XK_BackSpace,       spawn,          SHCMD("dunstctl close") },
@@ -145,11 +147,11 @@ static Key keys[] = {
 	{ MODKEY,                       XK_bracketleft,     incnmaster,     {.i = -1 } },
 	{ MODKEY,                       XK_h,               setmfact,       {.f = -0.05} },
 	{ MODKEY,                       XK_l,               setmfact,       {.f = +0.05} },
-	{ MODKEY,                       XK_m,               zoom,           {0} },
+	{ MODKEY,                       XK_space,           zoom,           {0} },
 	{ MODKEY,                       XK_semicolon,       view,           {0} },
 	{ MODKEY,                       XK_q,               killclient,     {0} },
 
-	{ MODKEY,                       XK_space,           setlayout,      {0} },
+	//{ MODKEY,                       XK_space,           setlayout,      {0} },
 	{ MODKEY|ShiftMask,             XK_space,           togglefloating, {0} },
 	{ MODKEY,                       XK_f,               togglefullscr,  {0} },
 	{ MODKEY,                       XK_0,               view,           {.ui = ~0 } },
