@@ -2,8 +2,12 @@
 
 /* appearance */
 static const unsigned int borderpx  = 3;        /* border pixel of windows */
-static const unsigned int gappx     = 8;        /* gaps between windows */
 static const unsigned int snap      = 32;       /* snap pixel */
+static const unsigned int gappih    = 10;       /* horiz inner gap between windows */
+static const unsigned int gappiv    = 10;       /* vert inner gap between windows */
+static const unsigned int gappoh    = 10;       /* horiz outer gap between windows and screen edge */
+static const unsigned int gappov    = 10;       /* vert outer gap between windows and screen edge */
+static       int smartgaps          = 0;        /* 1 means no outer gap when there is only one window */
 static const unsigned int systraypinning = 0;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
 static const unsigned int systrayonleft = 0;   	/* 0: systray in the right corner, >0: systray on left of status text */
 static const unsigned int systrayspacing = 2;   /* systray spacing */
@@ -17,7 +21,7 @@ static const char *fonts[]          = { "sans:size=10",
 										};
 static const char dmenufont[]       = "monospace:size=10";
 static const char col_1[]           = "#282a36";
-static const char col_2[]           = "#5a3d82";
+static const char col_2[]           = "#44475a";
 static const char col_3[]           = "#f8f8f2";
 static const char col_4[]           = "#000000";
 static const char col_5[]           = "#bd93f9";
@@ -54,14 +58,20 @@ static const int nmaster     = 1;    /* number of clients in master area */
 static const int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
 static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen window */
 
+#define FORCE_VSPLIT 1  /* nrowgrid layout: force two clients to always split vertically */
+#include "vanitygaps.c"
+
 //﬿         恵舘侀
 static const Layout layouts[] = {
 	/* symbol     arrange function */
-	{ " ﬿ ",      tile },    /* first entry is default */
-	{ "  ",      monocle },
-	{ " 恵 ",     centeredmaster },
-	{ "  ",      centeredfloatingmaster },
-	{ "  ",      NULL },    /* no layout function means floating behavior */
+	{ " ﬿    ",      tile },    /* first entry is default */
+	{ "     ",      monocle },
+	{ " 恵    ",     centeredmaster },
+	{ "     ",      centeredfloatingmaster },
+	{ " 侀   ",     spiral },
+	{ " 侀   ",     dwindle },
+	{ "  ",         NULL },    /* no layout function means floating behavior */
+	{ NULL,          NULL },
 };
 
 /* key definitions */
@@ -96,30 +106,47 @@ static Key keys[] = {
 	{ 0,                            XK_Print,           spawn,          SHCMD("screenshot") },
 	{ ShiftMask,                    XK_Print,           spawn,          SHCMD("screenshot selected") },
 
-	{ MODKEY,                       XK_p,               spawn,          {.v = dmenucmd } },
+	{ MODKEY,                       XK_d,               spawn,          {.v = dmenucmd } },
 	{ MODKEY,                       XK_Return,          spawn,          {.v = termcmd } },
 
 	/* Layout */
-	{ MODKEY,                       XK_e,               setlayout,      {.v = &layouts[0]} },
-	{ MODKEY,                       XK_r,               setlayout,      {.v = &layouts[1]} },
-	{ MODKEY,                       XK_t,               setlayout,      {.v = &layouts[2]} },
-	{ MODKEY,                       XK_y,               setlayout,      {.v = &layouts[3]} },
-	{ MODKEY,                       XK_u,               setlayout,      {.v = &layouts[4]} },
-
-	/* gaps control */
-	{ MODKEY,                       XK_bracketleft,     setgaps,        {.i = -1 } },
-	{ MODKEY,                       XK_bracketright,    setgaps,        {.i = +1 } },
-	{ MODKEY|ShiftMask,             XK_bracketleft,     setgaps,        {.i = 0  } },
+	{ MODKEY,                       XK_t,               setlayout,      {.v = &layouts[0]} },
+	{ MODKEY,                       XK_y,               setlayout,      {.v = &layouts[1]} },
+	{ MODKEY,                       XK_u,               setlayout,      {.v = &layouts[2]} },
+	{ MODKEY|ShiftMask,             XK_u,               setlayout,      {.v = &layouts[3]} },
+	{ MODKEY,                       XK_i,               setlayout,      {.v = &layouts[4]} },
+	{ MODKEY|ShiftMask,             XK_i,               setlayout,      {.v = &layouts[5]} },
+	{ MODKEY,                       XK_o,               setlayout,      {.v = &layouts[6]} },
+	{ MODKEY,                       XK_Tab,             cyclelayout,    {.i = +1 } },
+	{ MODKEY|ShiftMask,             XK_Tab,             cyclelayout,    {.i = -1 } },
+	
+	/* Gaps control */
+    { MODKEY,                       XK_g,               togglegaps,     {0} },
+	//{ MODKEY|Mod4Mask,              XK_u,               incrgaps,       {.i = +1 } },
+	//{ MODKEY|Mod4Mask|ShiftMask,    XK_u,               incrgaps,       {.i = -1 } },
+	//{ MODKEY|Mod4Mask,              XK_i,               incrigaps,      {.i = +1 } },
+	//{ MODKEY|Mod4Mask|ShiftMask,    XK_i,               incrigaps,      {.i = -1 } },
+	//{ MODKEY|Mod4Mask,              XK_o,               incrogaps,      {.i = +1 } },
+	//{ MODKEY|Mod4Mask|ShiftMask,    XK_o,               incrogaps,      {.i = -1 } },
+	//{ MODKEY|Mod4Mask,              XK_6,               incrihgaps,     {.i = +1 } },
+	//{ MODKEY|Mod4Mask|ShiftMask,    XK_6,               incrihgaps,     {.i = -1 } },
+	//{ MODKEY|Mod4Mask,              XK_7,               incrivgaps,     {.i = +1 } },
+	//{ MODKEY|Mod4Mask|ShiftMask,    XK_7,               incrivgaps,     {.i = -1 } },
+	//{ MODKEY|Mod4Mask,              XK_8,               incrohgaps,     {.i = +1 } },
+	//{ MODKEY|Mod4Mask|ShiftMask,    XK_8,               incrohgaps,     {.i = -1 } },
+	//{ MODKEY|Mod4Mask,              XK_9,               incrovgaps,     {.i = +1 } },
+	//{ MODKEY|Mod4Mask|ShiftMask,    XK_9,               incrovgaps,     {.i = -1 } },
+	//{ MODKEY|Mod4Mask|ShiftMask,    XK_0,               defaultgaps,    {0} },
 
 	{ MODKEY,                       XK_b,               togglebar,      {0} },
 	{ MODKEY,                       XK_j,               focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,               focusstack,     {.i = -1 } },
-	{ MODKEY,                       XK_i,               incnmaster,     {.i = +1 } },
-	{ MODKEY,                       XK_d,               incnmaster,     {.i = -1 } },
+	{ MODKEY,                       XK_bracketright,    incnmaster,     {.i = +1 } },
+	{ MODKEY,                       XK_bracketleft,     incnmaster,     {.i = -1 } },
 	{ MODKEY,                       XK_h,               setmfact,       {.f = -0.05} },
 	{ MODKEY,                       XK_l,               setmfact,       {.f = +0.05} },
 	{ MODKEY,                       XK_m,               zoom,           {0} },
-	{ MODKEY,                       XK_Tab,             view,           {0} },
+	{ MODKEY,                       XK_semicolon,       view,           {0} },
 	{ MODKEY,                       XK_q,               killclient,     {0} },
 
 	{ MODKEY,                       XK_space,           setlayout,      {0} },
@@ -150,7 +177,7 @@ static Key keys[] = {
 /* click can be ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle, ClkClientWin, or ClkRootWin */
 static Button buttons[] = {
 	/* click                event mask      button          function        argument */
-	{ ClkLtSymbol,          0,              Button1,        setlayout,      {0} },
+	{ ClkLtSymbol,          0,              Button1,        cyclelayout,    {.i = +1 } },
 	{ ClkLtSymbol,          0,              Button3,        setlayout,      {.v = &layouts[2]} },
 	{ ClkWinTitle,          0,              Button2,        zoom,           {0} },
 	{ ClkStatusText,        0,              Button2,        spawn,          {.v = termcmd } },
