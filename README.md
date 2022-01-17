@@ -10,5 +10,5 @@
 - dunst
 - nm-applet
 - volumeicon
-- [My scripts](https://github.com/nguyenletientrien/Dotfiles/tree/master/.github/SCRIPTS.md)
+- [My scripts](https://github.com/nguyenletientrien/Dotfiles/tree/master/.scripts)
 - Fonts: Hack Nerd Font, JoyPixels
