@@ -108,7 +108,7 @@ static Key keys[] = {
 	{ 0,                            XK_Print,           spawn,          SHCMD("screenshot") },
 	{ ShiftMask,                    XK_Print,           spawn,          SHCMD("screenshot selected") },
 
-	{ MODKEY,                       XK_d,               spawn,          {.v = dmenucmd } },
+	{ MODKEY,                       XK_p,               spawn,          {.v = dmenucmd } },
 	{ MODKEY,                       XK_Return,          spawn,          {.v = termcmd } },
 
 	/* Layout */
