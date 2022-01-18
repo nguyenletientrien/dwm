@@ -66,6 +66,7 @@ static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen win
 static const Layout layouts[] = {
 	/* symbol     arrange function */
 	{ "[]=",      tile },    /* first entry is default */
+	{ "TTT",      bstack },
 	{ "[M]",      monocle },
 	{ "|M|",      centeredmaster },
 	{ ">M>",      centeredfloatingmaster },
@@ -113,12 +114,13 @@ static Key keys[] = {
 
 	/* Layout */
 	{ MODKEY,                       XK_t,               setlayout,      {.v = &layouts[0]} },
-	{ MODKEY,                       XK_y,               setlayout,      {.v = &layouts[1]} },
-	{ MODKEY,                       XK_u,               setlayout,      {.v = &layouts[2]} },
-	{ MODKEY|ShiftMask,             XK_u,               setlayout,      {.v = &layouts[3]} },
-	{ MODKEY,                       XK_i,               setlayout,      {.v = &layouts[4]} },
-	{ MODKEY|ShiftMask,             XK_i,               setlayout,      {.v = &layouts[5]} },
-	{ MODKEY,                       XK_o,               setlayout,      {.v = &layouts[6]} },
+	{ MODKEY|ShiftMask,             XK_t,               setlayout,      {.v = &layouts[1]} },
+	{ MODKEY,                       XK_y,               setlayout,      {.v = &layouts[2]} },
+	{ MODKEY,                       XK_u,               setlayout,      {.v = &layouts[3]} },
+	{ MODKEY|ShiftMask,             XK_u,               setlayout,      {.v = &layouts[4]} },
+	{ MODKEY,                       XK_i,               setlayout,      {.v = &layouts[5]} },
+	{ MODKEY|ShiftMask,             XK_i,               setlayout,      {.v = &layouts[6]} },
+	{ MODKEY,                       XK_o,               setlayout,      {.v = &layouts[7]} },
 	{ MODKEY,                       XK_Tab,             cyclelayout,    {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_Tab,             cyclelayout,    {.i = -1 } },
 	
