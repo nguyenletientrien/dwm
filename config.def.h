@@ -15,8 +15,9 @@ static const int systraypinningfailfirst = 1;   /* 1: if pinning fails, display 
 static const int showsystray        = 1;     /* 0 means no systray */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const char *fonts[]          = { "sans:size=10",
-										"Hack Nerd Font:size=10:antialias=true:autohint=true",
+static const char *fonts[]          = { 
+										//"sans:size=10",
+										"Ubuntu Nerd Font:size=10:antialias=true:autohint=true",
 										"JoyPixels:size=10:antialias=true:autohint=true"
 										};
 static const char dmenufont[]       = "monospace:size=10";
@@ -62,17 +63,16 @@ static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen win
 #define FORCE_VSPLIT 1  /* nrowgrid layout: force two clients to always split vertically */
 #include "vanitygaps.c"
 
-//﬿         恵舘侀
 static const Layout layouts[] = {
 	/* symbol     arrange function */
-	{ " ﬿    ",      tile },    /* first entry is default */
-	{ "     ",      monocle },
-	{ " 恵    ",     centeredmaster },
-	{ "     ",      centeredfloatingmaster },
-	{ " 侀   ",     spiral },
-	{ " 侀   ",     dwindle },
-	{ "  ",         NULL },    /* no layout function means floating behavior */
-	{ NULL,          NULL },
+	{ "[]=",      tile },    /* first entry is default */
+	{ "[M]",      monocle },
+	{ "|M|",      centeredmaster },
+	{ ">M>",      centeredfloatingmaster },
+	{ "[@]",      spiral },
+	{ "[\\]",     dwindle },
+	{ "><>",      NULL },    /* no layout function means floating behavior */
+	{ NULL,       NULL },
 };
 
 /* key definitions */
