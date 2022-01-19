@@ -11,4 +11,4 @@
 - nm-applet
 - volumeicon
 - [My scripts](https://github.com/nguyenletientrien/Dotfiles/tree/master/.scripts)
-- Fonts: Ubuntu Nerd Font, JoyPixels
+- Fonts: sans, Ubuntu Nerd Font, JoyPixels
